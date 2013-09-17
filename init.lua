@@ -1,31 +1,65 @@
 minetest.register_node("maze:mazeblock", {
 	description = "Maze Generating Block",
 	tiles = {"maze_mazeblock.png"},
-	groups = {snappy=1,choppy=2,oddly_breakable_by_hand=2,flammable=3},
-	on_rightclick = function(pos, node, clicker)
-        -- inital setup
-		a = {}
+	groups = {cracky=3, stone=1},
+	
+	on_construct = function(pos)
+		local meta = minetest.env:get_meta(pos)
+		meta:set_string("formspec", 
+			"size[8,6]"..
+			"field[1,2.5;6.5,1;floor;Material for Floor:;default:desert_stone]"..
+			"field[1,4;6.5,1;size;Number of Blocks Wide (odd numbers <100):;39]"..
+			"button_exit[3,5;2,1;button;Done]"..
+			"field[1,1;6.5,1;walls;Material for Walls:;wool:dark_green]")
+	end,
+	
+	on_receive_fields = function(pos, formname, fields, sender)
+		local meta = minetest.env:get_meta(pos)
+		meta:set_string("walls", fields.walls)
+		meta:set_string("floor", fields.floor)
+		meta:set_string("size", fields.size)
+	end,
+	
+	on_punch = function(pos, node, puncher)
+		local meta = minetest.env:get_meta(pos)
+		local walls = meta:get_string("walls")
+		local floor = meta:get_string("floor")
+		local size = tonumber(meta:get_string("size"))
+		if walls == "" then
+			minetest.chat_send_player(puncher:get_player_name(),"Please right-click to set values before punching.")
+			return
+		end
+		if (size % 2 == 0) or (size > 99 ) then
+			minetest.chat_send_player(puncher:get_player_name(),"Please choose an odd number of blocks less than 100 wide.")
+			return
+		end
+        -- inital setup 
+		local a = {}
 		a[1] = 2
-		a[2] = -78
+		a[2] = size * -2
 		a[3] = -2
-		a[4] = 78
+		a[4] = size * 2
 		math.randomseed(os.time())
-		route = 41
-		zed = 0
-		maze = {}
-		for i=1, 1521 do
+		local route = size + 2
+		local zed = 0
+		local maze = {}
+		for i=1, (size * size) do
 			maze[i] = 9
 			zed = zed + 1
-			if i > 39 and i < 1483 and zed~=39 then
+			if i > size and i < ((size * size) - size + 1) and zed~=size then
 				maze[i] = 8
 			end
-			if zed > 39 then
+			if zed > size then
 				zed = 1
 				maze[i] = 9
 			end
 		end
 		-- generate maze
 		maze[route] = 5
+		local tran = 0
+		local j = 0
+		local m = 0
+		local b = 0
 		::gen1::
 		j = math.random(4)
 		m = j
@@ -52,32 +86,37 @@ minetest.register_node("maze:mazeblock", {
 			goto gen1
 		end
 		-- output finished maze
-		maze2 = {}
+		local maze2 = {}
+		local ex = 0
+		local zed = 0
+		local why1 = 0
+		local ex1 = 0
+		local zed1 = 0
 		for why=-1,2 do
 			ex = 0
 			zed = 0
 			why1 = pos.y + why
-			for i=1, 1521 do
+			for i=1, (size * size) do
 				zed = zed + 1
-				if zed > 39 then
+				if zed > size then
 					zed = 1
 					ex = ex + 1
 				end
 				if why > -1 then
 					if maze[i] == 9 or maze[i] == 8 then
-						maze2[i] = "default:cactus"
+						maze2[i] = walls
 					elseif maze[i] == 7 then
 						maze2[i] = "air"
 					end
 				else
-					maze2[i] = "default:desert_stone"
+					maze2[i] = floor
 				end
 				--add start and end points
-				if i == 40 or i == 1482 then
+				if i == (size + 1) or i == ((size * size) - size) then
 					if why > -1 then
 						maze2[i] = "air"
 					else
-						if i == 40 then
+						if i == (size + 1) then
 							maze2[i] = "maze:start"
 						else
 							maze2[i] = "maze:end"
@@ -94,12 +133,12 @@ minetest.register_node("maze:mazeblock", {
 
 minetest.register_node("maze:start", {
 	tiles = {"maze_start.png"},
-	groups = {snappy=1,choppy=2,oddly_breakable_by_hand=2,flammable=3},
+	groups = {cracky=3, stone=1},
 })
 
 minetest.register_node("maze:end", {
 	tiles = {"maze_end.png"},
-	groups = {snappy=1,choppy=2,oddly_breakable_by_hand=2,flammable=3},
+	groups = {cracky=3, stone=1},
 })
 
 -- register mazeblock craft
