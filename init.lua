@@ -8,7 +8,7 @@ minetest.register_node("maze:mazeblock", {
 		meta:set_string("formspec", 
 			"size[8,6]"..
 			"field[1,2.5;6.5,1;floor;Material for Floor:;default:desert_stone]"..
-			"field[1,4;6.5,1;size;Number of Blocks Wide (odd numbers <100):;39]"..
+			"field[1,4;6.5,1;size;Number of Blocks Wide (odd numbers <93):;39]"..
 			"button_exit[3,5;2,1;button;Done]"..
 			"field[1,1;6.5,1;walls;Material for Walls:;wool:dark_green]")
 	end,
@@ -29,11 +29,11 @@ minetest.register_node("maze:mazeblock", {
 			minetest.chat_send_player(puncher:get_player_name(),"Please right-click to set values before punching.")
 			return
 		end
-		if (size % 2 == 0) or (size > 99 ) then
-			minetest.chat_send_player(puncher:get_player_name(),"Please choose an odd number of blocks less than 100 wide.")
+		if (size % 2 == 0) or (size > 91 ) then
+			minetest.chat_send_player(puncher:get_player_name(),"Please choose an odd number of blocks less than 93 wide.")
 			return
 		end
-        -- inital setup 
+        -- inital setup - creates a square of 8s (breakable wall) surrounded by a frame of 9s (unbreakable wall)
 		local a = {}
 		a[1] = 2
 		a[2] = size * -2
@@ -60,31 +60,35 @@ minetest.register_node("maze:mazeblock", {
 		local j = 0
 		local m = 0
 		local b = 0
-		::gen1::
-		j = math.random(4)
-		m = j
-		::gen2::
-		b = route + a[j]
-		if maze[b] == 8 then
-			maze[b] = j
-			tran = route + (a[j]/2)
-			maze[tran] = 7
-			route = b
-			goto gen1
+		gen1 = function(j,m,b)
+			j = math.random(4)
+            m = j
+            gen2(j,m,b)
 		end
-		j = j + 1
-		if j == 5 then
-			j = 1
-		end
-		if j ~= m then
-			goto gen2
-		end
-		j = maze[route]
-		maze[route] = 7
-		if j < 5 then
-			route = route - a[j]
-			goto gen1
-		end
+		gen2 = function(j,m,b)         
+			b = route + a[j]
+            if maze[b] == 8 then
+                   maze[b] = j
+                   tran = route + (a[j]/2)
+                   maze[tran] = 7
+                   route = b
+                   gen1(j,m,b)
+            end
+            j = j + 1
+            if j == 5 then
+				j = 1
+            end
+            if j ~= m then
+                gen2(j,m,b)
+            end
+            j = maze[route]
+            maze[route] = 7
+            if j < 5 then
+                route = route - a[j]
+                gen1(j,m,b)
+            end
+		end	
+		gen1(j,m,b)
 		-- output finished maze
 		local maze2 = {}
 		local ex = 0
