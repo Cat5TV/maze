@@ -6,7 +6,7 @@ by thefamilygrog66
 Description:
 Here's a mod that is based on an old BASIC script that I used to play around with back in the early 1980s(!). 
 
-The player crafts a hedge maze block, which when right-clicked, opens an interactive form that allows the player to select wall and floor materials, as well as the width of the maze (odd numbers less than 100). Then the player left-clicks the block and it randomly generates a 3-block high, hedge maze, complete with a start and finish. 
+The player crafts a hedge maze block, which when right-clicked, opens an interactive form that allows the player to select wall and floor materials, as well as the width of the maze (odd numbers less than 93). Then the player left-clicks the block and it randomly generates a 3-block high, hedge maze, complete with a start and finish. 
 
 Recipe:
 
@@ -25,6 +25,8 @@ Mod dependencies: default, wool
 License:
 Sourcecode: WTFPL (see below)
 Graphics: WTFPL (see below)
+
+Thanks to mauvebic for showing me how to replace goto statements with recursive functions, to make the mod work on linux servers as well.
 
 See also:
 http://minetest.net/
