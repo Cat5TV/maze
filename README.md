@@ -21,7 +21,7 @@ The player crafts a hedge maze block, which when right-clicked, opens an interac
 	|  desert stone |  desert stone |  desert stone |
 	+---------------+---------------+---------------+
 	
-##Mod dependencies: default, wool
+###Mod dependencies: default, wool
 
 ##Original License:
 Sourcecode: WTFPL
