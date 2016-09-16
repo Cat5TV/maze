@@ -1,7 +1,8 @@
-**Hedge Maze (maze) mod for Minetest**
+**Hedge Maze (tps_maze) mod for Minetest**
+
 Originally by thefamilygrog66
-Modified for The Pixel Shadow's Parkour and Minigame Server
-[https://minetest.tv](minetest.tv)
+
+Modified for The Pixel Shadow's Parkour and Minigame Server - [minetest.tv](https://minetest.tv)
 
 ##Description:
 Here's a mod that is based on an old BASIC script that I used to play around with back in the early 1980s(!). 
