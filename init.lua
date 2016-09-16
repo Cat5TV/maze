@@ -1,7 +1,7 @@
 minetest.register_node("tps_maze:mazeblock", {
 	description = "Maze Generating Block",
 	tiles = {"maze_mazeblock.png"},
-	groups = {cracky=3, stone=1},
+	groups = {cracky=3, stone=1, not_in_creative_inventory=1},
 	
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
@@ -143,14 +143,4 @@ minetest.register_node("tps_maze:start", {
 minetest.register_node("tps_maze:end", {
 	tiles = {"maze_end.png"},
 	groups = {cracky=3, stone=1},
-})
-
--- register mazeblock craft
-minetest.register_craft({
-	output = "tps_maze:mazeblock",
-	recipe = {
-		{"default:cactus", "default:cactus", "default:cactus", },
-		{"default:cactus", "", "default:cactus", },
-		{"default:desert_stone", "default:desert_stone", "default:desert_stone", }
-	}
 })
