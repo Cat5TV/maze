@@ -1,4 +1,4 @@
-minetest.register_node("maze:mazeblock", {
+minetest.register_node("tps_maze:mazeblock", {
 	description = "Maze Generating Block",
 	tiles = {"maze_mazeblock.png"},
 	groups = {cracky=3, stone=1},
@@ -121,9 +121,9 @@ minetest.register_node("maze:mazeblock", {
 						maze2[i] = "air"
 					else
 						if i == (size + 1) then
-							maze2[i] = "maze:start"
+							maze2[i] = "tps_maze:start"
 						else
-							maze2[i] = "maze:end"
+							maze2[i] = "tps_maze:end"
 						end
 					end
 				end
@@ -135,19 +135,19 @@ minetest.register_node("maze:mazeblock", {
     end,
 })
 
-minetest.register_node("maze:start", {
+minetest.register_node("tps_maze:start", {
 	tiles = {"maze_start.png"},
 	groups = {cracky=3, stone=1},
 })
 
-minetest.register_node("maze:end", {
+minetest.register_node("tps_maze:end", {
 	tiles = {"maze_end.png"},
 	groups = {cracky=3, stone=1},
 })
 
 -- register mazeblock craft
 minetest.register_craft({
-	output = "maze:mazeblock",
+	output = "tps_maze:mazeblock",
 	recipe = {
 		{"default:cactus", "default:cactus", "default:cactus", },
 		{"default:cactus", "", "default:cactus", },
